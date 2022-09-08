@@ -1,6 +1,7 @@
 import React from 'react';
 import Router from 'next/router';
 import Link from 'next/link';
+import useWindowResize from '../hooks/useWindowResize';
 
 import { Button, Layout, Menu, List } from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
@@ -8,12 +9,16 @@ import { HomeOutlined, PlusOutlined, SettingOutlined, CheckSquareOutlined } from
 
 function ContentWrap({ children }) {
 
+	const WindowRewidth = useWindowResize();
+
 	return (
 		<>
-			<Layout>
+			<Layout style={{
+				minWidth: WindowRewidth}}>
 				<Sider
-					width={160}
-					style={{ paddingTop: 16 }}
+					className='side-wrap'
+					style={{paddingTop: 16}}
+					width={WindowRewidth > 360 ? 160 : 60}
 				>
 					<div className='side-wrap'>
 						<Button
@@ -55,12 +60,27 @@ function ContentWrap({ children }) {
 				<Layout>
 					<Header style={{ textAlign: 'center' }}>
 						<Link href='/todolist'>
-							<a style={{ textDecoration: 'none', color: 'white', fontSize: 20 }}>To do List</a>
+							<a style={{
+								textDecoration: 'none',
+								color: 'white',
+								fontSize: 20
+							}}>To do List</a>
 						</Link>
 					</Header>
-					<Content style={{width:720, backgroundColor:'white', margin:'auto', marginTop:64 }}>
-						<List>{children}</List>
+
+					<Content style={{
+						width:'80%',
+						backgroundColor:'white',
+						margin:'auto',
+						marginTop:'10vh'
+					}}>
+						<List>
+							<div className='list-wrap'>
+								{children}
+							</div>
+						</List>
 					</Content>
+
 					<Footer style={{ textAlign: 'center', fontSize: 10 }}>
 						© Maeve
 					</Footer>
@@ -69,7 +89,7 @@ function ContentWrap({ children }) {
 			</Layout>
 
 			<style jsx>{`
-				.side-wrap {width: fit-content}
+			.list-wrap { width: ${WindowRewidth >= 1024 ? 720 : '80%'}; }
 			`}</style>
 		</>
 	)

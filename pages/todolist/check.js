@@ -46,7 +46,7 @@ function CheckPage({ list }) {
 			<div className='list-wrap'>
 				{todolist.map((row) => {
 					return (
-						<List.Item key={row.rowKey} style={{ paddingLeft: 20 }}>
+						<List.Item key={row.rowKey} style={{ padding: '12px 20px' }}>
 							<Checkbox
 								id={row.rowKey}
 								checked={row.isCheck === 'Y' ? true : false}
@@ -77,7 +77,6 @@ export async function getServerSideProps() {
 		if (res.status === 200) {
 			const data = await res.json();
 			const list = data.data;
-			// console.log('data >> ',data);
 			return { props: { data, list } }
 		}
 

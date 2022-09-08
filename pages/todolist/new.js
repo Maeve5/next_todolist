@@ -29,7 +29,6 @@ function NewPage({ list }) {
 		getData();
 	}, []);
 
-
 	const onChange = ({ target: { value } }) => {
 		setTodo(value);
 	}
@@ -40,7 +39,7 @@ function NewPage({ list }) {
 				text: todo,
 			});
 			if (res.status === 200) {
-				Router.push('/todolist/new');
+				getData();
 			}
 		}
 		catch (e) {
@@ -54,16 +53,19 @@ function NewPage({ list }) {
 				return (
 					<List.Item
 						key={row.rowKey}
-						style={{ paddingLeft: 40 }}
+						style={{ padding: '12px 20px' }}
 					>{row.text}</List.Item>
 				)
 			})}
-			<Input
-				placeholder='할 일을 추가하세요.'
-				value={todo}
-				onChange={onChange}
-			/>
-			<Button size='small' onClick={onAdd} icon={PlusOutlined} />
+			<div style={{ display:'flex' }}>
+				<Input
+					autoFocus
+					placeholder='할 일을 추가하세요.'
+					value={todo}
+					onChange={onChange}
+				/>
+				<Button size='small' onClick={onAdd} icon={<PlusOutlined />} />
+			</div>
 		</ContentWrap>
 	);
 };
@@ -76,10 +78,8 @@ export async function getServerSideProps() {
 
 		if (res.status === 200) {
 			const data = await res.json();
-			const message = data.message;
 			const list = data.data;
-			// console.log('data >> ',data);
-			return { props: { data, list } }
+			return { props: { list } }
 		}
 
 		if (!data) {
@@ -88,7 +88,7 @@ export async function getServerSideProps() {
 			}
 		}
 
-		return { props: { data, list } };
+		return { props: { list } };
 	}
 	catch (error) {
 		console.log('err >> ', error);

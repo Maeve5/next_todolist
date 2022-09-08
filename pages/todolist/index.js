@@ -1,16 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { List } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { Dropdown, Menu, message, Space, List } from 'antd';
 import ContentWrap from '../../component/ContentWrap';
 
-function TodolistPage({ data, list }) {
+function TodolistPage({ list }) {
+
+	const [filter, setFilter] = useState('전체');
+
+	const onClick = ({ target: { label, key }}) => {
+		message.info(`Click on item ${key}`);
+		setFilter(label);
+	};
+
+	const menu = (
+		<Menu
+			onClick={onClick}
+			items={[
+				{
+					label: '전체',
+					key: '1',
+				},
+				{
+					label: '완료',
+					key: '2',
+				},
+				{
+					label: '미완료',
+					key: '3',
+				},
+			]}
+		/>
+	);
 
 	return (
 		<ContentWrap>
+			<Dropdown overlay={menu}>
+				<a onClick={(e) => e.preventDefault()}>
+					<Space>
+						{filter}
+						<DownOutlined />
+					</Space>
+				</a>
+			</Dropdown>
 			{list.map((row) => {
 				return (
 					<List.Item
 						key={row.rowKey}
+						checked={row.isCheck === 'Y' ? true : false}
 						style={{
 							paddingLeft: 40,
 							textDecoration: row.isCheck === 'Y'
@@ -35,10 +72,8 @@ export async function getServerSideProps() {
 
 		if (res.status === 200) {
 			const data = await res.json();
-			const message = data.message;
 			const list = data.data;
-			// console.log('data >> ',data);
-			return { props: { data, list } }
+			return { props: { list } }
 		}
 
 		if (!data) {
@@ -47,7 +82,7 @@ export async function getServerSideProps() {
 			}
 		}
 
-		return { props: { data, list } };
+		return { props: { list } };
 	}
 	catch (error) {
 		console.log('err >> ', error);
