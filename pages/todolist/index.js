@@ -6,11 +6,25 @@ import ContentWrap from '../../component/ContentWrap';
 
 function TodolistPage({ list }) {
 
+	const [dataSet, setDataSet] = useState(list);
+
 	const [filter, setFilter] = useState('전체');
 
-	const onClick = ({ target: { label, key }}) => {
-		message.info(`Click on item ${key}`);
-		setFilter(label);
+	const onClick = ({key}) => {
+		switch(Number(key)) {
+			case 1 : 
+				setDataSet(list);
+				break;
+			case 2 : 
+				setDataSet(dataSet.filter((row) => row.isCheck === 'Y'));
+				break;
+			case 3 : 
+				setDataSet(dataSet.filter((row) => row.isCheck === 'N'));
+				break;
+			default : 
+				setDataSet(list);
+				break;
+		}
 	};
 
 	const menu = (
@@ -43,7 +57,7 @@ function TodolistPage({ list }) {
 					</Space>
 				</a>
 			</Dropdown>
-			{list.map((row) => {
+			{dataSet.map((row) => {
 				return (
 					<List.Item
 						key={row.rowKey}
@@ -69,7 +83,6 @@ export default React.memo(TodolistPage);
 export async function getServerSideProps() {
 	try {
 		const res = await fetch('https://api.kkot.farm/todo');
-
 		if (res.status === 200) {
 			const data = await res.json();
 			const list = data.data;

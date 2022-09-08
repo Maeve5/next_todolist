@@ -28,27 +28,14 @@ function TodolistPage({ list }) {
 		getData();
 	}, []);
 
-	const onEdit = async ({ target: { id, value } }) => {
-		try {
-			const res = await API.patch('/todo/' + id, {
-				text: value ? value : '',
-			});
-
-			console.log(res)
-
-			if (res.status === 200) {
-				getData();
-			}
-		}
-		catch (e) {
-			console.log(e);
-		}
+	const onEdit = async (rowKey, value) => {
+		console.log(rowKey, value);
 	}
 
-	const onDelete = async (e) => {
-		console.log(e.target.id);
+	const onDelete = async (rowKey) => {
+		console.log(rowKey);
 		try {
-		    const response = await API.delete('/todo/' + id);
+		    const response = await API.delete('/todo/' + rowKey);
 
 		    if (response.status === 200) {
 		        alert('삭제되었습니다.');
@@ -68,16 +55,17 @@ function TodolistPage({ list }) {
 				return (
 					<List.Item key={row.rowKey} style={{ padding: '12px 20px' }}>
 						<Input
-							id={row.rowKey}
 							style={{ padding: 0, border: 'none' }}
 							value={row.text}
-							onChange={onEdit}
+							onChange={(e) => onEdit(row.rowKey, e.target.value)}
+							onBlur={() => {console.log('블러')}}
 							onFocusOut
 							placeholder='할 일을 추가하세요.'
 						/>
 						<Button
 							size='small'
-							onClick={onDelete}
+
+							onClick={() => onDelete(row.rowKey)}
 							icon={<CloseCircleFilled style={{ color: 'red' }} />}
 							style={{ border: 'none' }}
 						/>

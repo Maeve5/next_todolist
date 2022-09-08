@@ -1,7 +1,6 @@
 import '../styles/globals.css'
 import 'antd/dist/antd.css';
 import Head from 'next/head';
-import { RecoilRoot } from 'recoil';
 import { ConfigProvider } from 'antd';
 import koKR from 'antd/lib/locale/ko_KR';
 import 'moment/locale/ko';
@@ -17,11 +16,9 @@ function MyApp({ Component, pageProps }) {
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 			</Head>
 
-			<RecoilRoot>
-				<ConfigProvider locale={koKR}>
-					<Component {...pageProps} />
-				</ConfigProvider>
-			</RecoilRoot>
+			<ConfigProvider locale={koKR}>
+				<Component {...pageProps} />
+			</ConfigProvider>
 		</>
 	)
 }
