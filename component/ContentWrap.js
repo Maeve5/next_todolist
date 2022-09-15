@@ -1,5 +1,5 @@
 import React from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import useWindowResize from '../hooks/useWindowResize';
 
@@ -10,6 +10,7 @@ import { HomeOutlined, PlusOutlined, SettingOutlined, CheckSquareOutlined } from
 function ContentWrap({ children }) {
 
 	const WindowRewidth = useWindowResize();
+	const router = useRouter();
 
 	return (
 		<>
@@ -34,7 +35,7 @@ function ContentWrap({ children }) {
 							defaultSelectedKeys={['3']}
 							mode="inline"
 							onClick={(e) => {
-								Router.push(`/todolist/${e.key}`)
+								router.push(`/todolist/${e.key}`)
 							} }
 							items={[
 								{
